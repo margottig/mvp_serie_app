@@ -11,7 +11,7 @@ const EditarSerie = () => {
     const [portada, setPortada] = useState('')
 
       // edicion de objeto-documento
-      const [serie, setSerie] = useState({})
+    //   const [serie, setSerie] = useState({})
     
       // obtener id de url
       const {id} = useParams()
@@ -34,8 +34,6 @@ const EditarSerie = () => {
     }, [])
 
 
-
-
     const submitHandler = (e) =>{
         e.preventDefault()
         axios.put(`http://localhost:8000/api/editarserie/${id}`, {
@@ -45,7 +43,6 @@ const EditarSerie = () => {
             genero,
             year,
             portada
-
         }).then((res)=>{
             console.log(res);
             navigate('/todaseries')

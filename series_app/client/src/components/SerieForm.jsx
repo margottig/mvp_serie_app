@@ -10,6 +10,8 @@ const SerieForm = () => {
     const [year, setYear] = useState('')
     const [portada, setPortada] = useState('')
 
+    const [errors, setErrors] = useState({})
+
     const navigate = useNavigate()
 
 
@@ -24,10 +26,11 @@ const SerieForm = () => {
             portada
 
         }).then((res)=>{
-            console.log(res);
+            console.log(res, "LLega por THEN");
             navigate('/todaseries')
         }).catch((err)=>{
-            console.log(err)
+            console.log(err, "LLEGA POR CATCH")
+            setErrors(err.response.data.errors)
         })
     }
 
@@ -39,8 +42,10 @@ const SerieForm = () => {
         <form onSubmit={submitHandler}>
             <label htmlFor=""  className='form-label'>Titulo Serie</label>
             <input type="text" className='form-control' onChange={(e)=>setTitle(e.target.value)}/>
+            {errors.title ? <span className='text-danger'> {errors.title.message}</span> : null }<br></br>
             <label htmlFor="" className='form-label'>Creador</label>
             <input type="text" className='form-control'onChange={(e)=>setCreador(e.target.value)}/>
+            {errors.creador ? <span className='text-danger'>{errors.creador.message} </span>: null} <br />
             <label htmlFor="" className='form-label'> Rating</label>
             {/* <input type="text" className='form-control'onChange={(e)=>setRating(e.target.value)}/> */}
             <select className="form-control" onChange={(e)=>setRating(e.target.value)}>
@@ -51,6 +56,7 @@ const SerieForm = () => {
                 <option value="R">R</option>
                 <option value="NC-17">NC-17</option>
             </select>
+            {errors.rating ? <span className='text-danger'> {errors.rating.message}</span> : null }<br></br>
             <label htmlFor="" className='form-label'>Genero</label>
             {/* <input type="text" className='form-control'onChange={(e)=>setGenero(e.target.value)}/> */}
             <select type="text" className="form-control" onChange={(e)=>setGenero(e.target.value)} >
@@ -63,6 +69,7 @@ const SerieForm = () => {
                 <option value="Action">Action</option>
                 <option value="Family">Family</option>
             </select>
+            {errors.genero ? <span className='text-danger'> {errors.genero.message}</span> : null }<br></br>
             <label htmlFor="" className='form-label'> Año</label>
             <input type="number" className='form-control'onChange={(e)=>setYear(e.target.value)}/>
             <label htmlFor="" className='form-label'> Portada</label>

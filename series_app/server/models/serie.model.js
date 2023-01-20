@@ -3,14 +3,18 @@ const mongoose = require('mongoose')
 // Schema
 const SerieSchema = mongoose.Schema({
     title:{
-        type:String
+        type:String,
+        required:[true, "Por favor incluir titulo"],
+        minLength:[3, "Titulo debe incluir al menos 3 caracteres"]
     },
     creador:{
-        type:String
+        type:String,
+        required:[true, " Por favor agrega un creador" ]
     },
     rating:{
         type:String,
-        enum: ['G','PG','PG-13','R','NC-17']
+        enum: ['G','PG','PG-13','R','NC-17'],
+        required:[true, "Por favor elegir rating"],
     },
     genero:{
         type:String,
@@ -22,6 +26,7 @@ const SerieSchema = mongoose.Schema({
             'Fantasy',
             'Action',
             'Family'],
+            required:[true, "Por favor selecciona un genero"],
     },
     year:{
         type:Number
