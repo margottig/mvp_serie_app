@@ -29,7 +29,7 @@ const EditarSerie = () => {
             setYear(res.data.year)
             setPortada(res.data.portada)
         }).catch((err)=>{
-            consolo.log(err)
+            console.log(err)
         })
     }, [])
 

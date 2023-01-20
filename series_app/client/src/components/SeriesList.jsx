@@ -11,7 +11,7 @@ const SeriesList = () => {
             console.log(res)
             setLista(res.data)
         }).catch((err)=>{
-            consolo.log(err)
+            console.log(err)
         })
     }, [])
 
