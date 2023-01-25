@@ -6,7 +6,7 @@ const SeriesList = () => {
     const [lista, setLista] = useState([])
 
     useEffect(()=>{
-        axios.get('http://localhost:8000/api/obtenerseries')
+        axios.get('http://localhost:8000/api/obtenerseries', {withCredentials:true})
         .then((res)=>{
             console.log(res)
             setLista(res.data)
@@ -18,8 +18,8 @@ const SeriesList = () => {
   return (
     <div className='d-flex flex-wrap mt-5'>
         {
-            lista.map((serie)=>(
-                <div>
+            lista.map((serie, indice)=>(
+                <div key={indice}>
                 {/* <p>{serie}</p> */}
                 <h2>{serie.title}</h2>
                 <Link to={`/unaserie/${serie._id}`} className="d-block"> Mas Info </Link>

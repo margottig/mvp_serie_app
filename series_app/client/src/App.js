@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import SeriesList from './components/SeriesList';
 import EditarSerie from './components/EditarSerie';
 import UnaSerie from './components/UnaSerie';
+import Registro from './components/Registro';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path='/unaserie/:id' element={<UnaSerie/>}/>
           <Route path='/editarserie/:id' element={<EditarSerie/>}/>
           <Route path='/todaseries'element={<SeriesList/>}/>
+          <Route path='/registro'element={<Registro/>}/>
+          <Route path='/login'element={<Login/>}/>
         </Routes>
       </BrowserRouter>
 
