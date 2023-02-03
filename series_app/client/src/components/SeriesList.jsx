@@ -1,8 +1,9 @@
 import React, {useEffect,useState} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
+// import {Socket, io}  from 'socket.io-client'
 
-const SeriesList = () => {
+const SeriesList = ({socket}) => {
     const [lista, setLista] = useState([])
 
     useEffect(()=>{
@@ -14,6 +15,11 @@ const SeriesList = () => {
             console.log(err)
         })
     }, [])
+
+    socket.on('serieBorrada', (idBorrado)=>{
+        console.log("serie borrado con id es:", idBorrado)
+        setLista(lista.filter((serie)=> serie._id !== idBorrado))
+    })
 
   return (
     <div className='d-flex flex-wrap mt-5'>

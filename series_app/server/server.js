@@ -6,6 +6,10 @@ const PORT = 8000
 require('dotenv').config()
 const cookieParser = require('cookie-parser')
 
+// SOCKET (interacion con el modelo serie)
+const socket = require('socket.io')  
+const Serie = require('./models/serie.model')
+
 // requerir archivo de configuracion
 require('./config/mongoose.config')
 
@@ -29,7 +33,35 @@ Rutas(app)
 const rutasUsuarios = require('./routes/user.routes')
 rutasUsuarios(app)
 
-app.listen(PORT, ()=>{
+
+const server = app.listen(PORT, ()=>{
     console.log(`Servidor corriendo en el puerto ${PORT}`)
 })
 
+// configuracion cabecera socket
+const io = socket(server, {
+    cors:{
+        origin:'*',
+        methods:['GET', 'POST']
+    }
+})
+
+
+io.on('connection', (socket)=>{
+    console.log(" usuario conectado",socket.id)
+    socket.on("borrarSerie", (payload)=>{
+        console.log("payload", payload)
+        Serie.deleteOne({_id:payload})
+        .then((res)=>{
+            io.emit('serieBorrada', payload)
+        }).catch((err)=>{
+            console.log(err, "error al borrar serie")
+        })
+    })
+
+    socket.on('disconectar', (socket)=>{
+        console.log(`el usuario con id ${socket.id} acaba de desconectarse`)
+    })
+ 
+
+})

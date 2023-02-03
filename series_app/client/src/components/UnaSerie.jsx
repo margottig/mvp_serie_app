@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, {useState,useEffect} from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 
-const UnaSerie = () => {   
+const UnaSerie = ({socket}) => {   
      // edicion de objeto-documento
      const [serie, setSerie] = useState({})
     
@@ -11,7 +11,7 @@ const UnaSerie = () => {
      const navigate = useNavigate()
 
      useEffect(()=>{
-        axios.get(`http://localhost:8000/api/obtenerunaserie/${id}`)
+        axios.get(`http://localhost:8000/api/obtenerunaserie/${id}`, {withCredentials:true})
         .then((res)=>{
             setSerie(res.data)
         }).catch((err)=>{
@@ -20,12 +20,14 @@ const UnaSerie = () => {
     }, [])
 
     const deleteHandler =()=>{
-        axios.delete(`http://localhost:8000/api/borrarserie/${id}`)
-        .then((res)=>{
-            navigate('/todaseries')
-        }).catch((err)=>{
-            console.log(err)
-        })
+        socket.emit('borrarSerie', id)
+        navigate('/todaseries')
+        // axios.delete(`http://localhost:8000/api/borrarserie/${id}`)
+        // .then((res)=>{
+        //     navigate('/todaseries')
+        // }).catch((err)=>{
+        //     console.log(err)
+        // })
     }
 
 
