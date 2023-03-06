@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
+
 const UserSchema = new mongoose.Schema({
     nombre: {
       type: String,
@@ -24,18 +25,18 @@ const UserSchema = new mongoose.Schema({
       minlength: [8, "Password must be 8 characters or longer"]
     }
   }, {timestamps: true});
-  
-//middleware
+
+  //middleware
 UserSchema.pre('save', async function(next){
     try{
         const hashedPassword = await bcrypt.hash(this.password, 10)
-        console.log(" HASHED CONTRASENIA", hashedPassword)
         this.password = hashedPassword
         next()
+
     }catch{
         console.log("Error en guardar usuario", error)
+
     }
 })
 
-  
-module.exports = mongoose.model('Usuario', UserSchema)
+  module.exports = mongoose.model('Usuario', UserSchema)

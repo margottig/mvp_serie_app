@@ -1,67 +1,71 @@
 import axios from 'axios'
-import React, {useState,useEffect} from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
 
 const EditarSerie = () => {
-    const [titulo, setTitulo] = useState('')
+    const [title, setTitle] = useState('')
     const [creador, setCreador] = useState('')
     const [rating, setRating] = useState('')
     const [genero, setGenero] = useState('')
     const [year, setYear] = useState('')
     const [portada, setPortada] = useState('')
 
-      // edicion de objeto-documento
-    //   const [serie, setSerie] = useState({})
-    
-      // obtener id de url
-      const {id} = useParams()
-      const navigate = useNavigate()
+    const [errors, setErrors] = useState({})
 
-      
-  useEffect(() => {
-        axios.get(`http://localhost:8000/api/obtenerunaserie/${id}`)
+       // obtener id
+       const {id} = useParams()
+       // redireccionamiento
+       const navigate = useNavigate()
+
+
+       useEffect(()=>{
+        axios.get(`http://localhost:8000/api/unaserie/${id}`, {withCredentials:true})
         .then((res)=>{
             console.log(res)
-            setTitulo(res.data.title)
-            setCreador(res.data.creador)
+            setTitle(res.data.title)
+            setCreador(res.data.title)
             setRating(res.data.rating)
             setGenero(res.data.genero)
             setYear(res.data.year)
             setPortada(res.data.portada)
         }).catch((err)=>{
             console.log(err)
+            
         })
     }, [])
 
 
-    const submitHandler = (e) =>{
+    const submitHandler = (e)=>{
         e.preventDefault()
         axios.put(`http://localhost:8000/api/editarserie/${id}`, {
-            titulo,
+            title,
             creador,
             rating,
             genero,
             year,
             portada
-        }).then((res)=>{
+        }, {withCredentials:true})
+        .then((res)=>{
             console.log(res);
-            navigate('/todaseries')
+            navigate('/todasseries')
         }).catch((err)=>{
             console.log(err)
+            setErrors(err.response.data.errors)
         })
     }
 
-
   return (
     <div className='col-6 mx-auto'>
-        <h1> Editar Serie Animada</h1>
+        <h1> Formulario para editar una serie</h1>
         <form onSubmit={submitHandler}>
-            <label htmlFor=""  className='form-label'>Titulo</label>
-            <input type="text" value={titulo} className='form-control' onChange={(e)=>setTitulo(e.target.value)}/>
-            <label htmlFor="" className='form-label'>Creador</label>
+            <label htmlFor=""className='form-label'> Titulo Serie</label>
+            <input type="text" value={title} className='form-control'onChange={(e)=>setTitle(e.target.value)}/>
+            {errors.title ? <span className='text-danger'>{errors.title.message} </span>: null} <br />
+            <label htmlFor=""className='form-label'> Creador</label>
             <input type="text" value={creador} className='form-control'onChange={(e)=>setCreador(e.target.value)}/>
-            <label htmlFor="" className='form-label'> Rating</label>
-            {/* <input type="text" className='form-control'onChange={(e)=>setRating(e.target.value)}/> */}
+            {errors.creador ? <span className='text-danger'>{errors.creador.message} </span>: null} <br />
+            <label htmlFor=""className='form-label'> Rating</label>
+            {/* <input type="text" value={rating}className='form-control'onChange={(e)=>setRating(e.target.value)}/> */}
             <select className="form-control" value={rating} onChange={(e)=>setRating(e.target.value)}>
                 <option>Select A Rating</option>
                 <option value="G">G</option>
@@ -70,8 +74,8 @@ const EditarSerie = () => {
                 <option value="R">R</option>
                 <option value="NC-17">NC-17</option>
             </select>
-            <label htmlFor="" className='form-label'>Genero</label>
-            {/* <input type="text" className='form-control'onChange={(e)=>setGenero(e.target.value)}/> */}
+            <label htmlFor=""className='form-label'> Genero</label>
+            {/* <input type="text" value={genero} className='form-control' onChange={(e)=>setGenero(e.target.value)}/> */}
             <select type="text" value={genero} className="form-control" onChange={(e)=>setGenero(e.target.value)} >
                 <option>Select a Genre</option>
                 <option value="Comedia">Comedy</option>
@@ -82,11 +86,12 @@ const EditarSerie = () => {
                 <option value="Action">Action</option>
                 <option value="Family">Family</option>
             </select>
-            <label htmlFor="" className='form-label'> Año</label>
-            <input type="number" value={year}className='form-control'onChange={(e)=>setYear(e.target.value)}/>
-            <label htmlFor="" className='form-label'> Portada</label>
-            <input type="text" value={portada} className='form-control'onChange={(e)=>setPortada(e.target.value)}/>
-            <button className='btn btn-success mt-3'> Editar Serie</button>
+            <label htmlFor=""className='form-label'> Year</label>
+            <input type="number"value={year} className='form-control'onChange={(e)=>setYear(e.target.value)}/>
+            <label htmlFor=""className='form-label'> Portada</label>
+            <input type="text" value={portada}className='form-control'onChange={(e)=>setPortada(e.target.value)}/>
+            <button className='btn btn-success mt-3'> Crear Serie </button>
+
         </form>
     </div>
   )

@@ -1,47 +1,59 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {io} from 'socket.io-client';
-import { useState, useEffect } from 'react';
-import SerieForm from './components/SerieForm';
-import Navbar from './components/Navbar';
-import SeriesList from './components/SeriesList';
-import EditarSerie from './components/EditarSerie';
+import {Routes, Route, Navigate} from 'react-router-dom'
+import {useState, useEffect} from 'react'
+import {io} from 'socket.io-client'
+import SerieFormulario from './components/SerieFormulario';
+import TodasSeries from './components/TodasSeries';
+import BarraNavegacion from './components/BarraNavegacion';
 import UnaSerie from './components/UnaSerie';
+import EditarSerie from './components/EditarSerie';
 import Registro from './components/Registro';
 import Login from './components/Login';
+import PrivateRoute from './pages/PrivateRoute';
+import Main2 from './pages/Main2';
+
 
 function App() {
+  // const [loaded, setLoaded] = useState(false)
 
-  //set de socket desde el cliente
-  const [socket] = useState(()=>io(':8000'))
+  const [socket] = useState(()=>io(":8000"))
 
   useEffect(()=>{
     socket.on('connection', ()=>{
-      console.log(' coneccion establecida al servidor')
+      console.log('coneccion establecida al servidor')
     })
-    return ()=> socket.disconnect(true); // esto sucedera cuando salimos de la pagina o refrescamos
-  },[])
-
-
-
-
+    return ()=>  socket.disconnect(true); // esto sucede cuando refresh o salir de la pagina
+  }, [])
 
   return (
     <div className="App">
-      {/* <SerieForm/> */}
-      <BrowserRouter>
-      <Navbar/>
+      {/* <BrowserRouter> */}
+      <BarraNavegacion/>
         <Routes>
-          <Route path='/nuevaserie' element={<SerieForm/>}/>
-          <Route path='/unaserie/:id' element={<UnaSerie socket={socket}/>}/>
-          <Route path='/editarserie/:id' element={<EditarSerie/>}/>
-          <Route path='/todaseries'element={<SeriesList socket={socket}/>}/>
-          <Route path='/registro'element={<Registro/>}/>
-          <Route path='/login'element={<Login/>}/>
-        </Routes>
-      </BrowserRouter>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path='/nuevaserie' element={<SerieFormulario/>}/>
+          <Route path='/unaserie/:id' element={<UnaSerie socket={socket}/>}/>    
+          <Route path='/editarserie/:id' element={<EditarSerie/>}/>   
+          {/* <Route path='/todasseries' element={<TodasSerires socket={socket}/>}/>   */}
+          <Route path='/registro' element={<Registro/>}/>  
+          <Route path='/login' element={<Login/>}/> 
 
+          <Route
+          path="/others"
+          element={
+            <PrivateRoute>
+              <Main2/>
+            </PrivateRoute>
+          }/>
+
+          <Route element={<PrivateRoute />}>
+            <Route path='/todasseries' element={<Main2/>}/>         
+          </Route>
+          
+
+        </Routes>
+      {/* </BrowserRouter> */}
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+   
 
 const Registro = () => {
 
@@ -14,19 +16,21 @@ const Registro = () => {
 
     const submitHandler = (e)=>{
         e.preventDefault()
-        axios.post('http://localhost:8000/api/registro', {
+        axios.post('http://localhost:8000/api/registrar', {
             nombre, apellido, email, password, confirmPassword
         }, {withCredentials:true})
         .then((res)=>{
             console.log(res)
-            navigate('/todaseries')
+            navigate('/todasseries')
         }).catch((err)=>{
             console.log(err)
         })
     }
+
   return (
     <div>
-        <form onSubmit={submitHandler} className='col-6 mx-auto'>
+        
+         <form onSubmit={submitHandler} className='col-6 mx-auto'>
             <label htmlFor=""  className='form-label'>Nombre:</label>
             <input type="text" className='form-control' onChange={(e)=>setNombre(e.target.value)}/>
             <label htmlFor=""  className='form-label'>Apellido:</label>
@@ -38,7 +42,7 @@ const Registro = () => {
             <label htmlFor="" className='form-label'> Confirm Password</label>
             <input type="password" className='form-control'onChange={(e)=>setConfirmPassword(e.target.value)}/>
             <button className='btn btn-success mt-3'> Registrate!!!</button>
-        </form>
+            </form>
     </div>
   )
 }

@@ -1,9 +1,10 @@
-import React, {useEffect,useState} from 'react'
+import React,{useState, useEffect}from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-// import {Socket, io}  from 'socket.io-client'
 
-const SeriesList = ({socket}) => {
+
+const TodasSerires = ({socket}) => {
+
     const [lista, setLista] = useState([])
 
     useEffect(()=>{
@@ -17,7 +18,6 @@ const SeriesList = ({socket}) => {
     }, [])
 
     socket.on('serieBorrada', (idBorrado)=>{
-        console.log("serie borrado con id es:", idBorrado)
         setLista(lista.filter((serie)=> serie._id !== idBorrado))
     })
 
@@ -26,16 +26,14 @@ const SeriesList = ({socket}) => {
         {
             lista.map((serie, indice)=>(
                 <div key={indice}>
-                {/* <p>{serie}</p> */}
-                <h2>{serie.title}</h2>
-                <Link to={`/unaserie/${serie._id}`} className="d-block"> Mas Info </Link>
-                <img src={serie.portada} className="col col-4"/>
+                    <h2> {serie.title}</h2>
+                    <Link  to={`/unaserie/${serie._id}`} className='d-block'> Mas Info</Link>
+                    <img  alt={serie.title} key={serie._id} src={serie.portada} className='col col-4'/>
                 </div>
             ))
         }
-
     </div>
   )
 }
 
-export default SeriesList
+export default TodasSerires
